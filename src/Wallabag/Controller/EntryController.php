@@ -65,9 +65,7 @@ class EntryController
                 )
         );
 
-        $referer = $request->headers->get('referer');
-
-        return $app->redirect($referer);
+        return $app->redirect('/');
     }
 
     public function restoreAction(Request $request, Application $app, $id)
