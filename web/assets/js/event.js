@@ -38,7 +38,7 @@ wallabag.Event = (function() {
                     }
                 }
             };
-        }/*,
+        },
         ListenKeyboardEvents: function() {
 
             document.onkeypress = function(e) {
@@ -51,23 +51,19 @@ wallabag.Event = (function() {
                         case undefined:
                             break;
                         case 117: // u
-                            window.location.href = "?action=unread";
+                            window.location.href = "/";
                             queue = [];
                             break;
                         case 98: // b
-                            window.location.href = "?action=bookmarks";
+                            window.location.href = "/bookmarks";
                             queue = [];
                             break;
                         case 104: // h
-                            window.location.href = "?action=history";
+                            window.location.href = "/archive";
                             queue = [];
                             break;
                         case 115: // s
-                            window.location.href = "?action=feeds";
-                            queue = [];
-                            break;
-                        case 112: // p
-                            window.location.href = "?action=config";
+                            window.location.href = "/add";
                             queue = [];
                             break;
                         default:
@@ -113,9 +109,10 @@ wallabag.Event = (function() {
                             wallabag.Nav.ShowHelp();
                             break;
                     }
+                    
                 }
             }
-        }*/
+        }
     };
 
 })();
