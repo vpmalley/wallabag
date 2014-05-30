@@ -75,40 +75,40 @@ wallabag.Event = (function() {
 
                     queue = [];
 
-                    switch (e.keyCode || e.which) {
-                        case 100: // d
-                            wallabag.Item.DownloadContent(wallabag.Nav.GetCurrentItemId());
-                            break;
-                        case 112: // p
-                        case 107: // k
-                            wallabag.Nav.SelectPreviousItem();
-                            break;
-                        case 110: // n
-                        case 106: // j
-                            wallabag.Nav.SelectNextItem();
-                            break;
-                        case 118: // v
-                            wallabag.Item.OpenOriginal(wallabag.Nav.GetCurrentItemId());
-                            break;
-                        case 111: // o
-                            wallabag.Item.Show(wallabag.Nav.GetCurrentItemId());
-                            break;
-                        case 109: // m
-                            wallabag.Item.SwitchStatus(wallabag.Nav.GetCurrentItem());
-                            break;
-                        case 102: // f
-                            wallabag.Item.SwitchBookmark(wallabag.Nav.GetCurrentItem());
-                            break;
-                        case 104: // h
-                            wallabag.Nav.OpenPreviousPage();
-                            break
-                        case 108: // l
-                            wallabag.Nav.OpenNextPage();
-                            break;
-                        case 63: // ?
-                            wallabag.Nav.ShowHelp();
-                            break;
-                    }
+                    // switch (e.keyCode || e.which) {
+                    //     case 100: // d
+                    //         wallabag.Item.DownloadContent(wallabag.Nav.GetCurrentItemId());
+                    //         break;
+                    //     case 112: // p
+                    //     case 107: // k
+                    //         wallabag.Nav.SelectPreviousItem();
+                    //         break;
+                    //     case 110: // n
+                    //     case 106: // j
+                    //         wallabag.Nav.SelectNextItem();
+                    //         break;
+                    //     case 118: // v
+                    //         wallabag.Item.OpenOriginal(wallabag.Nav.GetCurrentItemId());
+                    //         break;
+                    //     case 111: // o
+                    //         wallabag.Item.Show(wallabag.Nav.GetCurrentItemId());
+                    //         break;
+                    //     case 109: // m
+                    //         wallabag.Item.SwitchStatus(wallabag.Nav.GetCurrentItem());
+                    //         break;
+                    //     case 102: // f
+                    //         wallabag.Item.SwitchBookmark(wallabag.Nav.GetCurrentItem());
+                    //         break;
+                    //     case 104: // h
+                    //         wallabag.Nav.OpenPreviousPage();
+                    //         break
+                    //     case 108: // l
+                    //         wallabag.Nav.OpenNextPage();
+                    //         break;
+                    //     case 63: // ?
+                    //         wallabag.Nav.ShowHelp();
+                    //         break;
+                    // }
                     
                 }
             }
