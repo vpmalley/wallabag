@@ -15,7 +15,7 @@ msgid "config"
 msgstr "config"
 
 msgid "entry.add"
-msgstr "poching a link"
+msgstr "saving a link"
 
 msgid "read the documentation"
 msgstr "read the documentation"
