@@ -19,7 +19,8 @@
         "sensio/framework-extra-bundle": "~3.0",
         "incenteev/composer-parameter-handler": "~2.0",
         "fivefilters/php-readability": "v1.0",
-        "friendsofsymfony/user-bundle": "2.0.x-dev"
+        "friendsofsymfony/user-bundle": "2.0.x-dev",
+        "simplepie/simplepie": "1.3.1"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3"

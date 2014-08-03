@@ -1,3 +1,8 @@
+wallabag_readability:
+    resource: "@WallabagReadabilityBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 wallabag_cli:
     resource: "@WallabagCliBundle/Controller/"
     type:     annotation

@@ -20,6 +20,7 @@ class AppKernel extends Kernel
             new Wallabag\Bundle\CoreBundle\WallabagCoreBundle(),
             new Wallabag\Bundle\ApiBundle\WallabagApiBundle(),
             new Wallabag\Bundle\CliBundle\WallabagCliBundle(),
+            new Wallabag\Bundle\ReadabilityBundle\WallabagReadabilityBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
