@@ -424,4 +424,84 @@ final class Tools
         return str_replace('+', '', $token);
     }
 
+    // Part of Text_LanguageDetect
+
+    /**
+     * Maps ISO 639-1 2-letter language codes to the language names
+     * in the language database
+     *
+     * Not all languages have a 2 letter code, so some are missing
+     *
+     * @var array
+     */
+
+    public static $code2ToName = array(
+        'ar' => 'arabic',
+        'az' => 'azeri',
+        'bg' => 'bulgarian',
+        'bn' => 'bengali',
+        'cs' => 'czech',
+        'cy' => 'welsh',
+        'da' => 'danish',
+        'de' => 'german',
+        'en' => 'english',
+        'es' => 'spanish',
+        'et' => 'estonian',
+        'fa' => 'farsi',
+        'fi' => 'finnish',
+        'fr' => 'french',
+        'ha' => 'hausa',
+        'hi' => 'hindi',
+        'hr' => 'croatian',
+        'hu' => 'hungarian',
+        'id' => 'indonesian',
+        'is' => 'icelandic',
+        'it' => 'italian',
+        'kk' => 'kazakh',
+        'ky' => 'kyrgyz',
+        'la' => 'latin',
+        'lt' => 'lithuanian',
+        'lv' => 'latvian',
+        'mk' => 'macedonian',
+        'mn' => 'mongolian',
+        'ne' => 'nepali',
+        'nl' => 'dutch',
+        'no' => 'norwegian',
+        'pl' => 'polish',
+        'ps' => 'pashto',
+        'pt' => 'portuguese',
+        'ro' => 'romanian',
+        'ru' => 'russian',
+        'sk' => 'slovak',
+        'sl' => 'slovene',
+        'so' => 'somali',
+        'sq' => 'albanian',
+        'sr' => 'serbian',
+        'sv' => 'swedish',
+        'sw' => 'swahili',
+        'tl' => 'tagalog',
+        'tr' => 'turkish',
+        'uk' => 'ukrainian',
+        'ur' => 'urdu',
+        'uz' => 'uzbek',
+        'vi' => 'vietnamese',
+    );
+
+    /**
+     * Returns the language name for the given 2-letter ISO 639-1 code.
+     *
+     * @param string $code Two-letter language code (e.g. "sv")
+     *
+     * @return string English language name like "swedish"
+     */
+
+    public static function code2ToName($code)
+        {
+            $lang = strtolower($code);
+            if (!isset(self::$code2ToName[$code])) {
+                return null;
+            }
+            return self::$code2ToName[$code];
+        }
+
 }

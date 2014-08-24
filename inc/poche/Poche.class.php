@@ -147,6 +147,21 @@ class Poche
                 $content = Tools::getPageContent($url);
                 $title = ($content['rss']['channel']['item']['title'] != '') ? $content['rss']['channel']['item']['title'] : _('Untitled');
                 $body = $content['rss']['channel']['item']['description'];
+                // TODO : convert date
+                if ($content['rss']['channel']['item']['updated'] == '') { // ATOM
+                    if ($content['rss']['channel']['item']['pubDate'] == '') { // RSS
+                        if($content['rss']['channel']['item']['dc:date'] == '') { // other
+                            $date = '';} 
+                        else {$date = $content['rss']['channel']['item']['dc:date'];}
+                    } 
+                    else {$date = $content['rss']['channel']['item']['pubDate'];}
+                }
+                else {
+                    $date = $content['rss']['channel']['item']['updated'];
+                }
+                
+                $author = ($content['rss']['channel']['item']['author'] != '') ? $content['rss']['channel']['item']['author'] : _('Unknown author');
+                $language = ($content['rss']['channel']['item']['language'] != '') ? $content['rss']['channel']['item']['language'] : '';
 
                 // clean content from prevent xss attack
                 $purifier = $this->_getPurifier();
