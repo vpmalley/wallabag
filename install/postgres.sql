@@ -11,7 +11,10 @@ CREATE TABLE IF NOT EXISTS entries (
     is_read boolean DEFAULT false,
     is_fav boolean DEFAULT false,
     content TEXT,
-    user_id integer NOT NULL
+    user_id integer NOT NULL,
+    dateorigin DATETIME,
+    author TEXT,
+    language TEXT
 );
 
 CREATE TABLE IF NOT EXISTS users (

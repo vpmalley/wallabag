@@ -13,6 +13,9 @@ CREATE TABLE IF NOT EXISTS `entries` (
   `is_fav` tinyint(1) NOT NULL DEFAULT 0,
   `content` blob NOT NULL,
   `user_id` int(11) NOT NULL,
+  `dateorigin`  DATETIME,
+  `author`  TEXT,
+  `language`  TEXT,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
