@@ -395,15 +395,15 @@ else if (isset($_POST['install'])) {
                     </tr>
                 </tbody>
             </table>
-            <p>Status : 
+            <p>Status : </p>
             <?php if($phpconfig['php'] && $phpconfig['xml'] && $phpconfig['pcre'] && $phpconfig['parse_ini'] && $phpconfig['allow_url_fopen'] && $phpconfig['gettext']) {
                 if ($phpconfig['filter'] && $phpconfig['tidy'] && $phpconfig['curl'] && $phpconfig['parallel']) {
-                    echo 'Your webserver has all it needs for ' . $app_name . ' to work properly.<br /><a class="nextstep" id="nextstep1" href="#step2">Next Step</a></p>';
+                    echo '<p>Your webserver has all what it needs for ' . $app_name . ' to work properly.</p><p><a class="nextstep" id="nextstep1" href="#step2">Next Step</a></p>';
                 } else {
-                    echo 'Your webserver hasn\'t got the perfect configuration for ' . $app_name .  ' to work properly, but it should work anyway.<br />You can try to fix some problems highlighted above.<br /><a class="nextstep" id="nextstep1" href="#step2">Next Step</a></p>';
+                    echo '<p>Your webserver hasn\'t got the perfect configuration for ' . $app_name .  ' to work properly, but it should work anyway.<br />You can try to fix some problems highlighted above.</p><p><a class="nextstep" style="background-color:#FF9500" id="nextstep1" href="#step2">Next Step</a></p>';
                 }
             } else {
-                echo $app_name . ' can\'t work on this webserver. Please fix the problems highlighted above.';
+                echo '<p>' . $app_name . ' can\'t work on this webserver. Please fix the problems highlighted above.</p>';
             }
 
             ?>
