@@ -11,6 +11,39 @@
 $errors = array();
 $successes = array();
 
+
+/** 
+ * First step : check php configuration 
+ */
+
+$app_name = 'wallabag';
+$phpconfig = [];
+
+$phpconfig['php'] = (function_exists('version_compare') && version_compare(phpversion(), '5.3.3', '>='));
+$phpconfig['pcre'] = extension_loaded('pcre');
+$phpconfig['zlib'] = extension_loaded('zlib');
+$phpconfig['mbstring'] = extension_loaded('mbstring');
+$phpconfig['iconv'] = extension_loaded('iconv');
+$phpconfig['tidy'] = function_exists('tidy_parse_string');
+$phpconfig['curl'] = function_exists('curl_exec');
+$phpconfig['parse_ini'] = function_exists('parse_ini_file');
+$phpconfig['parallel'] = ((extension_loaded('http') && class_exists('HttpRequestPool')) || ($phpconfig['curl'] && function_exists('curl_multi_init')));
+$phpconfig['allow_url_fopen'] = (bool)ini_get('allow_url_fopen');
+$phpconfig['filter'] = extension_loaded('filter');
+$phpconfig['gettext'] = function_exists("gettext");
+
+if (extension_loaded('xmlreader')) {
+    $xml_ok = true;
+} elseif (extension_loaded('xml')) {
+    $parser_check = xml_parser_create();
+    xml_parse_into_struct($parser_check, '<foo>&amp;</foo>', $values);
+    xml_parser_free($parser_check);
+    $xml_ok = isset($values[0]['value']);
+} else {
+    $xml_ok = false;
+}
+$phpconfig['xml'] = $xml_ok;
+
 /* Function taken from at http://php.net/manual/en/function.rmdir.php#110489
  * Idea : nbari at dalmp dot com
  * Rights unknown
@@ -187,6 +220,34 @@ else if (isset($_POST['install'])) {
         <link rel="stylesheet" href="themes/baggy/css/print.css" media="print">
         <script src="themes/default/js/jquery-2.0.3.min.js"></script>
         <script src="themes/baggy/js/init.js"></script>
+        <style type="text/css">
+            table#chart {
+                border-collapse:collapse;
+            }
+
+            table#chart th {
+                background-color:#eee;
+                padding:2px 3px;
+                border:1px solid #fff;
+            }
+
+            table#chart td {
+                text-align:center;
+                padding:2px 3px;
+                border:1px solid #eee;
+            }
+            .good{
+            background-color:#52CC5B;
+            }
+            .bad{
+            background-color:#F74343;
+            font-style:italic;
+            font-weight: bold;
+            }
+            .pass{
+            background-color:#FF9500;
+            }
+        </style>
     </head>
     <body>
         <header class="w600p center mbm">
@@ -234,13 +295,105 @@ else if (isset($_POST['install'])) {
                 </div>
                 <?php endif; ?>    
             <?php endif; ?>
-            <p>To install wallabag, you just have to fill the following fields. That's all.</p>
-            <p>Don't forget to check your server compatibility <a href="wallabag_compatibility_test.php?from=install">here</a>.</p>
+
+            <div id="stepone" class="chunk">
+            <h2 style="text-align:center;"><?php echo $app_name; ?>: Compatibility Test</h2>
+            <table cellpadding="0" cellspacing="0" border="0" width="100%" id="chart">
+                <thead>
+                    <tr>
+                        <th>Test</th>
+                        <th>Should Be</th>
+                        <th>What You Have</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="<?php echo ($phpconfig['php']) ? 'enabled' : 'disabled'; ?>">
+                        <td>PHP</td>
+                        <td>5.3.3 or higher</td>
+                        <td class="<?php echo ($phpconfig['php']) ? 'good' : 'disabled'; ?>"><?php echo phpversion(); echo ($phpconfig['php']) ? '' : 'You are running an unsupported version of PHP.' ?></td>
+                    </tr>
+                    <tr class="<?php echo ($phpconfig['xml']) ? 'enabled' : 'disabled'; ?>">
+                        <td><a href="http://php.net/xml">XML</a></td>
+                        <td>Enabled</td>
+                        <?php echo ($phpconfig['xml']) ? '<td class="good">Enabled, and sane</span>' : '<td class="bad">Disabled, or broken<br />Your PHP installation doesn\'t support XML parsing.'; ?></td>
+                    </tr>
+                    <tr class="<?php echo ($phpconfig['pcre']) ? 'enabled' : 'disabled'; ?>">
+                        <td><a href="http://php.net/pcre">PCRE</a></td>
+                        <td>Enabled</td>
+                        <?php echo ($phpconfig['pcre']) ? '<td class="good">Enabled' : '<td class="bad">Disabled<br />Your PHP installation doesn\'t support Perl-Compatible Regular Expressions.'; ?></td>
+                    </tr>
+<!--                    <tr class="<?php echo ($phpconfig['zlib']) ? 'enabled' : 'disabled'; ?>">
+                        <td><a href="http://php.net/zlib">Zlib</a></td>
+                        <td>Enabled</td>
+                        <?php echo ($phpconfig['zlib']) ? '<td class="good">Enabled' : '<td class="bad">Disabled<br />Extension not available.  SimplePie will ignore any GZIP-encoding, and instead handle feeds as uncompressed text.'; ?></td>
+                    </tr> -->
+<!--                    <tr class="<?php echo ($phpconfig['mbstring']) ? 'enabled' : 'disabled'; ?>">
+                        <td><a href="http://php.net/mbstring">mbstring</a></td>
+                        <td>Enabled</td>
+                        <?php echo ($phpconfig['mbstring']) ? '<td class="good">Enabled' : '<td class="bad">Disabled'; ?></td>
+                    </tr> -->
+<!--                    <tr class="<?php echo ($phpconfig['iconv']) ? 'enabled' : 'disabled'; ?>">
+                        <td><a href="http://php.net/iconv">iconv</a></td>
+                        <td>Enabled</td>
+                        <?php echo ($phpconfig['iconv']) ? '<td class="good">Enabled' : '<td class="bad">Disabled'; ?></td>
+                    </tr> -->
+                    <tr class="<?php echo ($phpconfig['filter']) ? 'enabled' : 'disabled'; ?>">
+                        <td><a href="http://uk.php.net/manual/en/book.filter.php">Data filtering</a></td>
+                        <td>Enabled</td>
+                        <?php echo ($phpconfig['filter']) ? '<td class="good">Enabled' : '<td class="pass">Disabled<br />Your PHP configuration has the filter extension disabled. '; ?></td>
+                    </tr>                   
+                    <tr class="<?php echo ($phpconfig['tidy']) ? 'enabled' : 'disabled'; ?>">
+                        <td><a href="http://php.net/tidy">Tidy</a></td>
+                        <td>Enabled</td>
+                        <?php echo ($phpconfig['tidy']) ? '<td class="good">Enabled' : '<td class="pass">Disabled<br />Extension not available. ' . $app_name . ' should still work with most feeds, but you may experience problems with some.'; ?></td>
+                    </tr>
+                    <tr class="<?php echo ($phpconfig['curl']) ? 'enabled' : 'disabled'; ?>">
+                        <td><a href="http://php.net/curl">cURL</a></td>
+                        <td>Enabled</td>
+                        <?php echo (extension_loaded('curl')) ? '<td class="good">Enabled' : '<td class="pass">Disabled<br />Extension is not available.  SimplePie will use <code>fsockopen()</code> instead.'; ?></td>
+                    </tr>
+                    <tr class="<?php echo ($phpconfig['parse_ini']) ? 'enabled' : 'disabled'; ?>">
+                        <td><a href="http://uk.php.net/manual/en/function.parse-ini-file.php">Parse ini file</td>
+                        <td>Enabled</td>
+                        <?php echo ($phpconfig['parse_ini']) ? '<td class="good">Enabled' : '<td class="bad">Disabled<br />Bad luck : your webhost has decided to block the use of the <em>parse_ini_file</em> function.'; ?></td>
+                    </tr>
+                    <tr class="<?php echo ($phpconfig['parallel']) ? 'enabled' : 'disabled'; ?>">
+                        <td>Parallel URL fetching</td>
+                        <td>Enabled</td>
+                        <?php echo ($phpconfig['parallel']) ? '<td class="good">Enabled' : '<td class="pass">Disabled<br /><code>HttpRequestPool</code> or <code>curl_multi</code> support is not available.  <?php echo $app_name; ?> will use <code>file_get_contents()</code> instead to fetch URLs sequentially rather than in parallel.'; ?></td>
+                    </tr>
+                    <tr class="<?php echo ($phpconfig['allow_url_fopen']) ? 'enabled' : 'disabled'; ?>">
+                        <td><a href="http://www.php.net/manual/en/filesystem.configuration.php#ini.allow-url-fopen">allow_url_fopen</a></td>
+                        <td>Enabled</td>
+                        <?php echo ($phpconfig['allow_url_fopen']) ? '<td class="good">Enabled' : '<td class="bad">Disabled<br />Your PHP configuration has allow_url_fopen disabled.'; ?></td>
+                    </tr>
+                    <tr class="<?php echo ($phpconfig['gettext']) ? 'enabled' : 'disabled'; ?>">
+                        <td><a href="http://php.net/manual/en/book.gettext.php">gettext</a></td>
+                        <td>Enabled</td>
+                        <?php echo ($phpconfig['gettext']) ? '<td class="good">Enabled' : '<td class="bad">Disabled<br />Extension not available. The system we use to display wallabag in various languages is not available.'; ?></td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>Status : 
+            <?php if($phpconfig['php'] && $phpconfig['xml'] && $phpconfig['pcre'] && $phpconfig['parse_ini'] && $phpconfig['allow_url_fopen'] && $phpconfig['gettext']) {
+                if ($phpconfig['filter'] && $phpconfig['tidy'] && $phpconfig['curl'] && $phpconfig['parallel']) {
+                    echo 'Your webserver has all it needs for ' . $app_name . ' to work properly.<br /><a href="#steptwo">Next Step</a></p>';
+                } else {
+                    echo 'Your webserver hasn\'t got the perfect configuration for ' . $app_name .  ' to work properly, but it should work anyway.<br />You can try to fix some problems highlighted above.<br /><a href="#steptwo">Next Step</a></p>';
+                }
+            } else {
+                echo $app_name . ' can\'t work on this webserver. Please fix the problems highlighted above.';
+            }
+
+            ?>
+            </p>
+        </div>
+        <div id="steptwo">
+        <h2 style="text-align:center;">Twig installation</h2>
             <form method="post">
                 <fieldset>
-                    <legend><strong>Technical settings</strong></legend>
-                    <?php if (!is_dir('vendor')) : ?>
-                        <div class='messages notice install'>wallabag needs twig, a template engine (<a href="http://twig.sensiolabs.org/">?</a>). Two ways to install it:<br />
+                    <?php if (!is_dir('vendor')) { ?>
+                        <div>wallabag needs twig, a template engine (<a href="http://twig.sensiolabs.org/">?</a>). Two ways to install it:<br />
                         <ul>
                             <li>automatically download and extract vendor.zip into your wallabag folder. 
                             <p><input type="submit" name="download" value="Download vendor.zip" /></p>
@@ -252,7 +405,15 @@ else if (isset($_POST['install'])) {
 php composer.phar install</code></pre></li>
                         </ul>
                         </div>
-                    <?php endif; ?>
+                    <?php } else { ?>
+                    <div>Twig is already installed. All good !</div>
+                    <?php } ?>
+                </fieldset>
+            <a href="#stepthree">Next Step</a>
+        </div>
+        <div id="stepthree">
+            <h2 style="text-align:center;">Database installation</h2>
+                <fieldset>
                     <p>
                         Database engine:
                         <ul>
@@ -282,9 +443,22 @@ php composer.phar install</code></pre></li>
                         </ul>
                     </p>
                 </fieldset>
-
+                <div>You must choose a database system.
+                <ul>
+                    <li><strong>SQLite</strong> is the simplest of those three database systems. It just writes data into a file. You don't have to configure login informations of any kind.<br>
+                    The downfall is that it might be slower than other database systems with very large piece of data. <br> 
+                    It is therefore recommanded if you begin with wallabag, or you don't want to deal with extra configuration.</li>
+                    <li><strong>MySQL</strong> (also known as <strong>MariaDB</strong>) is a very common database system on most servers. <br>
+                    It should be faster than SQLite in most cases. <br>
+                    You have to enter credentials to access it. Contact your server administrator if needed.</li>
+                    <li><strong>PostgreSQL</strong> is another database system very similar to MySQL, but less frequent on most hosting plans. However, some people prefer it since it may be faster than MySQL in some cases.</li>
+                </ul>
+                </div>
+                <a class="next" href="#stepfour">Next step</a>
+            </div>
+            <div id="stepfour">
+                <h2 style="text-align:center;">User settings</h2>
                 <fieldset>
-                    <legend><strong>User settings</strong></legend>
                     <p>
                         <label for="username">Username</label>
                         <input type="text" required id="username" name="username" value="wallabag" />
