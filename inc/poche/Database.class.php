@@ -277,6 +277,7 @@ class Database {
 
     public function updateContentAndTitle($id, $title, $body, $user_id)
     {
+        // metadata not updated
         $sql_action = 'UPDATE entries SET content = ?, title = ? WHERE id=? AND user_id=?';
         $params_action = array($body, $title, $id, $user_id);
         $query = $this->executeQuery($sql_action, $params_action);
@@ -421,10 +422,10 @@ class Database {
      * @param integer $user_id
      * @return integer $id of inserted record
      */
-    public function add($url, $title, $content, $user_id, $isFavorite=0, $isRead=0)
+    public function add($url, $title, $content, $dateorigin, $author, $language, $user_id, $isFavorite=0, $isRead=0)
     {
-        $sql_action = 'INSERT INTO entries ( url, title, content, user_id, is_fav, is_read ) VALUES (?, ?, ?, ?, ?, ?)';
-        $params_action = array($url, $title, $content, $user_id, $isFavorite, $isRead);
+        $sql_action = 'INSERT INTO entries ( url, title, content, user_id, is_fav, is_read, dateorigin, author, language ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
+        $params_action = array($url, $title, $content, $user_id, $isFavorite, $isRead, $dateorigin, $author, $language);
 
         if ( !$this->executeQuery($sql_action, $params_action) ) {
           $id = null;

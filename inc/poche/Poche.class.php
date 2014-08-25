@@ -151,16 +151,17 @@ class Poche
                 if ($content['rss']['channel']['item']['updated'] == '') { // ATOM
                     if ($content['rss']['channel']['item']['pubDate'] == '') { // RSS
                         if($content['rss']['channel']['item']['dc:date'] == '') { // other
-                            $date = '';} 
-                        else {$date = $content['rss']['channel']['item']['dc:date'];}
+                            $dateorigin = '';} 
+                        else {$dateorigin = $content['rss']['channel']['item']['dc:date'];}
                     } 
-                    else {$date = $content['rss']['channel']['item']['pubDate'];}
+                    else {$dateorigin = $content['rss']['channel']['item']['pubDate'];}
                 }
                 else {
-                    $date = $content['rss']['channel']['item']['updated'];
+                    $dateorigin = $content['rss']['channel']['item']['updated'];
                 }
                 
                 $author = ($content['rss']['channel']['item']['author'] != '') ? $content['rss']['channel']['item']['author'] : _('Unknown author');
+                // TODO : convert language with Tools::code2ToName() function
                 $language = ($content['rss']['channel']['item']['language'] != '') ? $content['rss']['channel']['item']['language'] : '';
 
                 // clean content from prevent xss attack
@@ -172,7 +173,7 @@ class Poche
                 $duplicate = NULL;
                 $duplicate = $this->store->retrieveOneByURL($url->getUrl(), $this->user->getId());
 
-                $last_id = $this->store->add($url->getUrl(), $title, $body, $this->user->getId());
+                $last_id = $this->store->add($url->getUrl(), $title, $body, $dateorigin, $author, $language, $this->user->getId());
                 if ( $last_id ) {
                     Tools::logm('add link ' . $url->getUrl());
                     if (DOWNLOAD_PICTURES) {
