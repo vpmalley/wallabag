@@ -31,6 +31,7 @@ $phpconfig['parallel'] = ((extension_loaded('http') && class_exists('HttpRequest
 $phpconfig['allow_url_fopen'] = (bool)ini_get('allow_url_fopen');
 $phpconfig['filter'] = extension_loaded('filter');
 $phpconfig['gettext'] = function_exists("gettext");
+$phpconfig['gd'] = extension_loaded('gd');
 
 if (extension_loaded('xmlreader')) {
     $xml_ok = true;
@@ -358,6 +359,12 @@ else if (isset($_POST['install'])) {
                         <td>Enabled</td>
                         <?php echo ($phpconfig['iconv']) ? '<td class="good">Enabled' : '<td class="bad">Disabled'; ?></td>
                     </tr> -->
+                    <tr class="<?php echo ($phpconfig['gd']) ? 'enabled' : 'disabled'; ?>">
+                        <td><a href="">GD Library</a></td>
+                        <td>Enabled</td>
+                        <?php echo ($phpconfig['gd']) ? '<td class="good">Enabled' : '<td class="pass">Disabled<br />Extension not available. Locally saving pictures on server will not be possible'; ?></td>
+                    </tr>     
+
                     <tr class="<?php echo ($phpconfig['filter']) ? 'enabled' : 'disabled'; ?>">
                         <td><a href="http://uk.php.net/manual/en/book.filter.php">Data filtering</a></td>
                         <td>Enabled</td>
@@ -397,7 +404,7 @@ else if (isset($_POST['install'])) {
             </table>
             <p>Status : </p>
             <?php if($phpconfig['php'] && $phpconfig['xml'] && $phpconfig['pcre'] && $phpconfig['parse_ini'] && $phpconfig['allow_url_fopen'] && $phpconfig['gettext']) {
-                if ($phpconfig['filter'] && $phpconfig['tidy'] && $phpconfig['curl'] && $phpconfig['parallel']) {
+                if ($phpconfig['filter'] && $phpconfig['tidy'] && $phpconfig['curl'] && $phpconfig['parallel'] && $phpconfig['gd']) {
                     echo '<p>Your webserver has all what it needs for ' . $app_name . ' to work properly.</p><p><a class="nextstep" id="nextstep1" href="#step2">Next Step</a></p>';
                 } else {
                     echo '<p>Your webserver hasn\'t got the perfect configuration for ' . $app_name .  ' to work properly, but it should work anyway.<br />You can try to fix some problems highlighted above.</p><p><a class="nextstep" style="background-color:#FF9500" id="nextstep1" href="#step2">Next Step</a></p>';
