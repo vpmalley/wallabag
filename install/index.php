@@ -44,10 +44,11 @@ if (extension_loaded('xmlreader')) {
 }
 $phpconfig['xml'] = $xml_ok;
 
+
 /* Function taken from at http://php.net/manual/en/function.rmdir.php#110489
  * Idea : nbari at dalmp dot com
  * Rights unknown
- * Here in case of .gitignore files
+ * Here in case of .gitignore files to delete
  */
 function delTree($dir) {
     $files = array_diff(scandir($dir), array('.','..'));
@@ -57,6 +58,10 @@ function delTree($dir) {
     return rmdir($dir);
   }
 
+/**
+ * Delete install directory
+ */
+
 if (isset($_GET['clean'])) {
     if (is_dir('install')){
     delTree('install');
@@ -64,6 +69,10 @@ if (isset($_GET['clean'])) {
     }
 }
 
+
+/**
+ * Download vendor package
+ */
 if (isset($_POST['download'])) {
     if (!file_put_contents("cache/vendor.zip", fopen("http://static.wallabag.org/files/vendor.zip", 'r'))) {
         $errors[] = 'Impossible to download vendor.zip. Please <a href="http://wllbg.org/vendor">download it manually</a> and unzip it in your wallabag folder.';
@@ -88,6 +97,11 @@ if (isset($_POST['download'])) {
         }
     }
 }
+
+/**
+ * Installation
+ */
+
 else if (isset($_POST['install'])) {
     if (!is_dir('vendor')) {
         $errors[] = 'You must install twig before.';
@@ -247,6 +261,13 @@ else if (isset($_POST['install'])) {
             .pass{
             background-color:#FF9500;
             }
+
+            .nextstep {
+                background-color: #52CC5B;
+                padding: 10px;
+                border-radius: 5px;
+                display: inline-block;
+            }
         </style>
     </head>
     <body>
@@ -273,7 +294,7 @@ else if (isset($_POST['install'])) {
                         <?php endforeach; ?>
                         </ul>
                     </p>
-                    <p><a href="index.php">Please reload</a> this page when you think you resolved these problems.</p>
+                    <!--<p><a href="index.php">Please reload</a> this page when you think you resolved these problems.</p>-->
                 </div>
             <?php endif; ?>
             <?php if (!empty($successes)) : ?>
@@ -296,7 +317,7 @@ else if (isset($_POST['install'])) {
                 <?php endif; ?>    
             <?php endif; ?>
 
-            <div id="stepone" class="chunk">
+            <div id="step1" class="chunk">
             <h2 style="text-align:center;"><?php echo $app_name; ?>: Compatibility Test</h2>
             <table cellpadding="0" cellspacing="0" border="0" width="100%" id="chart">
                 <thead>
@@ -377,9 +398,9 @@ else if (isset($_POST['install'])) {
             <p>Status : 
             <?php if($phpconfig['php'] && $phpconfig['xml'] && $phpconfig['pcre'] && $phpconfig['parse_ini'] && $phpconfig['allow_url_fopen'] && $phpconfig['gettext']) {
                 if ($phpconfig['filter'] && $phpconfig['tidy'] && $phpconfig['curl'] && $phpconfig['parallel']) {
-                    echo 'Your webserver has all it needs for ' . $app_name . ' to work properly.<br /><a href="#steptwo">Next Step</a></p>';
+                    echo 'Your webserver has all it needs for ' . $app_name . ' to work properly.<br /><a class="nextstep" id="nextstep1" href="#step2">Next Step</a></p>';
                 } else {
-                    echo 'Your webserver hasn\'t got the perfect configuration for ' . $app_name .  ' to work properly, but it should work anyway.<br />You can try to fix some problems highlighted above.<br /><a href="#steptwo">Next Step</a></p>';
+                    echo 'Your webserver hasn\'t got the perfect configuration for ' . $app_name .  ' to work properly, but it should work anyway.<br />You can try to fix some problems highlighted above.<br /><a class="nextstep" id="nextstep1" href="#step2">Next Step</a></p>';
                 }
             } else {
                 echo $app_name . ' can\'t work on this webserver. Please fix the problems highlighted above.';
@@ -388,7 +409,7 @@ else if (isset($_POST['install'])) {
             ?>
             </p>
         </div>
-        <div id="steptwo">
+        <div id="step2">
         <h2 style="text-align:center;">Twig installation</h2>
             <form method="post">
                 <fieldset>
@@ -409,10 +430,11 @@ php composer.phar install</code></pre></li>
                     <div>Twig is already installed. All good !</div>
                     <?php } ?>
                 </fieldset>
-            <a href="#stepthree">Next Step</a>
+            <a class="nextstep" id="nextstep2" href="#step3">Next Step</a>
         </div>
-        <div id="stepthree">
+        <div id="step3">
             <h2 style="text-align:center;">Database installation</h2>
+            You must choose a database engine.
                 <fieldset>
                     <p>
                         Database engine:
@@ -443,20 +465,20 @@ php composer.phar install</code></pre></li>
                         </ul>
                     </p>
                 </fieldset>
-                <div>You must choose a database system.
+                <div>
                 <ul>
-                    <li><strong>SQLite</strong> is the simplest of those three database systems. It just writes data into a file. You don't have to configure login informations of any kind.<br>
-                    The downfall is that it might be slower than other database systems with very large piece of data. <br> 
+                    <li><strong>SQLite</strong> is the simplest of those three database engines. It just writes data into a file. You don't have to configure login informations of any kind.<br>
+                    The downfall is that it might be slower than other database engines with very large piece of data. <br> 
                     It is therefore recommanded if you begin with wallabag, or you don't want to deal with extra configuration.</li>
-                    <li><strong>MySQL</strong> (also known as <strong>MariaDB</strong>) is a very common database system on most servers. <br>
+                    <li><strong>MySQL</strong> (also known as <strong>MariaDB</strong>) is a very common database engine on most servers. <br>
                     It should be faster than SQLite in most cases. <br>
                     You have to enter credentials to access it. Contact your server administrator if needed.</li>
-                    <li><strong>PostgreSQL</strong> is another database system very similar to MySQL, but less frequent on most hosting plans. However, some people prefer it since it may be faster than MySQL in some cases.</li>
+                    <li><strong>PostgreSQL</strong> is another database engine very similar to MySQL, but less frequent on most hosting plans. However, some people prefer it since it may be faster than MySQL in some cases.</li>
                 </ul>
                 </div>
-                <a class="next" href="#stepfour">Next step</a>
+                <a class="nextstep" id="nextstep3" href="#step4">Next step</a>
             </div>
-            <div id="stepfour">
+            <div id="step4">
                 <h2 style="text-align:center;">User settings</h2>
                 <fieldset>
                     <p>
@@ -518,6 +540,27 @@ php composer.phar install</code></pre></li>
                         }
                     }
                 });
+            $("#step2").hide();
+            $("#step3").hide();
+            $("#step4").hide();
+
+            $("#nextstep1").click(function()
+            {
+                $("#step1").hide();
+                $("#step2").show();
+            });
+
+            $("#nextstep2").click(function()
+            {
+                $("#step2").hide();
+                $("#step3").show();
+            });
+
+            $("#nextstep3").click(function()
+            {
+                $("#step3").hide();
+                $("#step4").show();
+            });
         </script>
     </body>
 </html>
