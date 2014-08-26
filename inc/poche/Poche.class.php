@@ -148,21 +148,11 @@ class Poche
                 $title = ($content['rss']['channel']['item']['title'] != '') ? $content['rss']['channel']['item']['title'] : _('Untitled');
                 $body = $content['rss']['channel']['item']['description'];
                 // TODO : convert date
-                if ($content['rss']['channel']['item']['updated'] == '') { // ATOM
-                    if ($content['rss']['channel']['item']['pubDate'] == '') { // RSS
-                        if($content['rss']['channel']['item']['dc:date'] == '') { // other
-                            $dateorigin = '';} 
-                        else {$dateorigin = $content['rss']['channel']['item']['dc:date'];}
-                    } 
-                    else {$dateorigin = $content['rss']['channel']['item']['pubDate'];}
-                }
-                else {
-                    $dateorigin = $content['rss']['channel']['item']['updated'];
-                }
+                $dateorigin = ($content['rss']['channel']['item']['dc:date'] != '') ? $content['rss']['channel']['item']['dc:date'] : '';
                 
-                $author = ($content['rss']['channel']['item']['author'] != '') ? $content['rss']['channel']['item']['author'] : _('Unknown author');
-                // TODO : convert language with Tools::code2ToName() function
-                $language = ($content['rss']['channel']['item']['language'] != '') ? $content['rss']['channel']['item']['language'] : '';
+                $author = ($content['rss']['channel']['item']['author'] != '') ? $content['rss']['channel']['item']['author'] : _('Unknown');
+                $language = ($content['rss']['channel']['item']['dc_language'] != '') ? Tools::code2ToName($content['rss']['channel']['item']['language']) : _('Unknown');
+                $format = ($content['rss']['channel']['item']['dc_format'] != '') ? $content['rss']['channel']['item']['dc_format'] : '';
 
                 // clean content from prevent xss attack
                 $purifier = $this->_getPurifier();
@@ -173,7 +163,7 @@ class Poche
                 $duplicate = NULL;
                 $duplicate = $this->store->retrieveOneByURL($url->getUrl(), $this->user->getId());
 
-                $last_id = $this->store->add($url->getUrl(), $title, $body, $dateorigin, $author, $language, $this->user->getId());
+                $last_id = $this->store->add($url->getUrl(), $title, $body, $dateorigin, $author, $language, $format, $this->user->getId());
                 if ( $last_id ) {
                     Tools::logm('add link ' . $url->getUrl());
                     if (DOWNLOAD_PICTURES) {

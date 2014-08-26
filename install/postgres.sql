@@ -14,7 +14,8 @@ CREATE TABLE IF NOT EXISTS entries (
     user_id integer NOT NULL,
     dateorigin DATETIME,
     author TEXT,
-    language TEXT
+    language TEXT,
+    format TEXT
 );
 
 CREATE TABLE IF NOT EXISTS users (

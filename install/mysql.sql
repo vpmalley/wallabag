@@ -14,8 +14,9 @@ CREATE TABLE IF NOT EXISTS `entries` (
   `content` blob NOT NULL,
   `user_id` int(11) NOT NULL,
   `dateorigin`  DATETIME,
-  `author`  TEXT,
-  `language`  TEXT,
+  `author` TEXT,
+  `language` TEXT,
+  `format` TEXT,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 

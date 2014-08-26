@@ -422,10 +422,10 @@ class Database {
      * @param integer $user_id
      * @return integer $id of inserted record
      */
-    public function add($url, $title, $content, $dateorigin, $author, $language, $user_id, $isFavorite=0, $isRead=0)
+    public function add($url, $title, $content, $dateorigin, $author, $language, $format, $user_id, $isFavorite=0, $isRead=0)
     {
-        $sql_action = 'INSERT INTO entries ( url, title, content, user_id, is_fav, is_read, dateorigin, author, language ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
-        $params_action = array($url, $title, $content, $user_id, $isFavorite, $isRead, $dateorigin, $author, $language);
+        $sql_action = 'INSERT INTO entries ( url, title, content, user_id, is_fav, is_read, dateorigin, author, language, format ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+        $params_action = array($url, $title, $content, $user_id, $isFavorite, $isRead, $dateorigin, $author, $language, $format);
 
         if ( !$this->executeQuery($sql_action, $params_action) ) {
           $id = null;
