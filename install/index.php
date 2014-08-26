@@ -269,6 +269,12 @@ else if (isset($_POST['install'])) {
                 border-radius: 5px;
                 display: inline-block;
             }
+            .reload {
+                background-color: #154472;
+                padding: 10px;
+                border-radius: 5px;
+                display: inline-block;
+            }
         </style>
     </head>
     <body>
@@ -407,7 +413,7 @@ else if (isset($_POST['install'])) {
                 if ($phpconfig['filter'] && $phpconfig['tidy'] && $phpconfig['curl'] && $phpconfig['parallel'] && $phpconfig['gd']) {
                     echo '<p>Your webserver has all what it needs for ' . $app_name . ' to work properly.</p><p><a class="nextstep" id="nextstep1" href="#step2">Next Step</a></p>';
                 } else {
-                    echo '<p>Your webserver hasn\'t got the perfect configuration for ' . $app_name .  ' to work properly, but it should work anyway.<br />You can try to fix some problems highlighted above.</p><p><a class="nextstep" style="background-color:#FF9500" id="nextstep1" href="#step2">Next Step</a></p>';
+                    echo '<p>Your webserver hasn\'t got the perfect configuration for ' . $app_name .  ' to work properly, but it should work anyway.<br />You can try to fix some problems highlighted above.</p><p><a class="nextstep" style="background-color:#FF9500" id="nextstep1" href="#step2">Next Step</a></p><a class="reload" href="#step1">Reload</a>';
                 }
             } else {
                 echo '<p>' . $app_name . ' can\'t work on this webserver. Please fix the problems highlighted above.</p>';
@@ -430,14 +436,15 @@ else if (isset($_POST['install'])) {
                             <?php endif; ?>
                                 <em>This method is mainly recommended if you don't have a dedicated server.</em></li>
                             <li>use <a href="http://getcomposer.org/">Composer</a> :<pre><code>curl -s http://getcomposer.org/installer | php
-php composer.phar install</code></pre></li>
+php composer.phar install</code></pre><p>Then, please reload the page.</p></li>
                         </ul>
                         </div>
+                        <a class="reload" href="#step2">Reload</a>
                     <?php } else { ?>
-                    <div>Twig is already installed. All good !</div>
+                    <div>Twig seems to be already installed. All good !</div>
+                    <a class="nextstep" id="nextstep2" href="#step3">Next Step</a>
                     <?php } ?>
                 </fieldset>
-            <a class="nextstep" id="nextstep2" href="#step3">Next Step</a>
         </div>
         <div id="step3">
             <h2 style="text-align:center;">Database installation</h2>
