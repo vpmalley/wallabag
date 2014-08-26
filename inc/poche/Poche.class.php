@@ -787,7 +787,9 @@ class Poche
                 $newItem->setTitle($entry['title']);
                 $newItem->setSource(Tools::getPocheUrl() . '?view=view&amp;id=' . $entry['id']);
                 $newItem->setLink($entry['url']);
-                $newItem->setDate(time());
+                $newItem->setDate($entry['dateorigin']);
+                $newitem->addElement('dc:language', $entry['language']);
+                $newitem->addElement('dc:format', $entry['format']);
                 $newItem->setDescription($entry['content']);
                 $feed->addItem($newItem);
             }
