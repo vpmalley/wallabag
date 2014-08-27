@@ -131,6 +131,7 @@ else if (isset($_POST['install'])) {
             // User informations
             $username = trim($_POST['username']);
             $password = trim($_POST['password']);
+            $email = trim($_POST['email']);
             $salted_password = sha1($password . $username . $salt);
 
             // Database informations
@@ -194,8 +195,8 @@ else if (isset($_POST['install'])) {
                 // Create user
                 $handle->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-                $sql = 'INSERT INTO users (username, password, name) VALUES (?, ?, ?)';
-                $params = array($username, $salted_password, $username);
+                $sql = 'INSERT INTO users (username, password, name, email) VALUES (?, ?, ?, ?)';
+                $params = array($username, $salted_password, $username, $email);
                 $query = executeQuery($handle, $sql, $params);
 
                 $id_user = $handle->lastInsertId();
@@ -505,6 +506,10 @@ php composer.phar install</code></pre><p>Then, please reload the page.</p></li>
                     </p>
                     <p>
                         <label for="show">Show password:</label> <input name="show" id="show" type="checkbox" onchange="document.getElementById('password').type = this.checked ? 'text' : 'password'">
+                    </p>
+                    <p>
+                        <label for="email">Email (not required)</label>
+                        <input type="email" name="email" />
                     </p>
                 </fieldset>
 
