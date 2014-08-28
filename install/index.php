@@ -10,6 +10,7 @@
 
 $errors = array();
 $successes = array();
+$installed = false;
 
 
 /** 
@@ -60,13 +61,19 @@ function delTree($dir) {
   }
 
 /**
+ * Call to delete install directory if already installed
+ */
+if (isset($_GET['clean'])) {
+    clean();
+    header('Location: index.php');
+}
+
+/**
  * Delete install directory
  */
-
-if (isset($_GET['clean'])) {
+function clean() {
     if (is_dir('install')){
-    delTree('install');
-    header('Location: index.php');      
+    delTree('install');    
     }
 }
 
@@ -105,7 +112,7 @@ if (isset($_POST['download'])) {
 
 else if (isset($_POST['install'])) {
     if (!is_dir('vendor')) {
-        $errors[] = 'You must install twig before.';
+        $errors[] = 'You must install twig before.'; # useless unless JS not enabled
     }
     else {
         $continue = true;
@@ -209,6 +216,8 @@ else if (isset($_POST['install'])) {
                 $params = array($id_user, 'language', 'en_EN.UTF8');
                 $query = executeQuery($handle, $sql, $params);
 
+                clean();
+                $installed = true;
                 $successes[] = 'wallabag is now installed. You can now <a href="index.php?clean=0">access it !</a>';
             }
         }
@@ -291,7 +300,8 @@ else if (isset($_POST['install'])) {
                 <li><a href="http://doc.wallabag.org/">doc</a></li>
                 <li><a href="http://www.wallabag.org/help/">help</a></li>
                 <li><a href="http://www.wallabag.org/">wallabag.org</a></li>
-            </ul> 
+            </ul>
+            <?php if (!$installed) { ?>
             <?php if (!empty($errors)) : ?>
                 <div class='messages error install'>
                     <p>Errors during installation:</p>
@@ -302,7 +312,6 @@ else if (isset($_POST['install'])) {
                         <?php endforeach; ?>
                         </ul>
                     </p>
-                    <!--<p><a href="index.php">Please reload</a> this page when you think you resolved these problems.</p>-->
                 </div>
             <?php endif; ?>
             <?php if (!empty($successes)) : ?>
@@ -319,7 +328,7 @@ else if (isset($_POST['install'])) {
                 <?php if (file_exists('inc/poche/config.inc.php') && is_dir('vendor')) : ?>
                 <div class='messages success install'>
                     <p>
-                        wallabag seems already installed. If you want to update it, you only have to delete install folder, then <a href="index.php">reload this page</a>.
+                        wallabag seems already installed. If you wanted to update it, you now have to <a href="index.php?clean=0">delete the install directory</a>.
                     </p>
                 </div>
                 <?php endif; ?>    
@@ -442,7 +451,7 @@ php composer.phar install</code></pre><p>Then, please reload the page.</p></li>
                         </div>
                         <a class="reload" href="#step2">Reload</a>
                     <?php } else { ?>
-                    <div>Twig seems to be already installed. All good !</div>
+                    <div class='messages success install'>Twig seems to be already installed. All good !</div>
                     <a class="nextstep" id="nextstep2" href="#step3">Next Step</a>
                     <?php } ?>
                 </fieldset>
@@ -585,5 +594,10 @@ php composer.phar install</code></pre><p>Then, please reload the page.</p></li>
                 location.reload();
             });
         </script>
+    <?php } else { ?>
+    <div class='messages success install'>
+    wallabag is now installed. You can now <a href="index.php">access it !</a>
+    </div>
+    <?php } ?>
     </body>
 </html>
