@@ -580,6 +580,10 @@ php composer.phar install</code></pre><p>Then, please reload the page.</p></li>
                 $("#step3").hide();
                 $("#step4").show();
             });
+
+            $(".reload").click(function(){
+                location.reload();
+            });
         </script>
     </body>
 </html>
