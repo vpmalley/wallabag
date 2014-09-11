@@ -3,6 +3,7 @@
 namespace Wallabag\Bundle\CoreBundle\Repository;
 
 use Doctrine\ODM\MongoDB\DocumentRepository;
+use JMS\DiExtraBundle\Annotation\Service;
 use Wallabag\Bundle\CoreBundle\Document\Entry;
 
 /**
@@ -14,7 +15,7 @@ class EntryRepository extends DocumentRepository
      * Find all unread bookmarks for a given user
      *
      * @param string $userId the user ID
-     * @return Bookmark[]
+     * @return Entry[]
      */
     public function findUnreadByUser($userId) {
         return $this->createQueryBuilder('Wallabag\Bundle\CoreBundle\Document\Entry')

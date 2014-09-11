@@ -19,12 +19,19 @@ class AppKernel extends Kernel
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new FOS\UserBundle\FOSUserBundle(),
             new FOS\RestBundle\FOSRestBundle(),
+            new Nelmio\ApiDocBundle\NelmioApiDocBundle(),
             new JMS\DiExtraBundle\JMSDiExtraBundle($this),
             new JMS\AopBundle\JMSAopBundle(),
             new JMS\SerializerBundle\JMSSerializerBundle(),
+            new Sonata\CoreBundle\SonataCoreBundle(),
+            new Sonata\BlockBundle\SonataBlockBundle(),
+            new Sonata\AdminBundle\SonataAdminBundle(),
+            new Sonata\DoctrineMongoDBAdminBundle\SonataDoctrineMongoDBAdminBundle(),
+            new \Knp\Bundle\MenuBundle\KnpMenuBundle(),
             new Wallabag\Bundle\CoreBundle\WallabagCoreBundle(),
             new Wallabag\Bundle\ApiBundle\WallabagApiBundle(),
             new Wallabag\Bundle\CliBundle\WallabagCliBundle(),
+            new Wallabag\Bundle\FullTextRssBundle\WallabagFullTextRssBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

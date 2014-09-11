@@ -9,5 +9,40 @@
             <argument type="service" id="doctrine_mongodb" />
             <tag name="request.param_converter" converter="doctrine.odm" />
         </service>
+
+        <!-- Repositories -->
+        <service id="wallabag_core.repository.entry" class="Wallabag\Repository\EntryRepository"
+                 factory-service="doctrine.odm.mongodb.document_manager" factory-method="getRepository">
+            <argument type="string">WallabagCoreBundle:Entry</argument>
+        </service>
+
+        <!-- HTML Purifier -->
+        <service id="wallabag_core.html_purifier.config" class="HTMLPurifier_Config"
+                 factory-class="HTMLPurifier_Config" factory-method="createDefault">
+            <configurator service="wallabag_core.html_purifier.configurator" method="configure"/>
+        </service>
+        <service id="wallabag_core.html_purifier" class="HTMLPurifier">
+            <argument type="service" id="wallabag_core.html_purifier.config" />
+        </service>
+
+        <!-- Admin -->
+        <service id="sonata.admin.user" class="Wallabag\Bundle\CoreBundle\Admin\UserAdmin">
+            <tag name="sonata.admin" manager_type="doctrine_mongodb" group="Wallabag" label="User"/>
+            <argument />
+            <argument>Wallabag\Bundle\CoreBundle\Document\User</argument>
+            <argument />
+            <call method="setTranslationDomain">
+                <argument>WallabagCoreBundle</argument>
+            </call>
+        </service>
+        <service id="sonata.admin.entry" class="Wallabag\Bundle\CoreBundle\Admin\EntryAdmin">
+            <tag name="sonata.admin" manager_type="doctrine_mongodb" group="Wallabag" label="Entry"/>
+            <argument />
+            <argument>Wallabag\Bundle\CoreBundle\Document\Entry</argument>
+            <argument />
+            <call method="setTranslationDomain">
+                <argument>WallabagCoreBundle</argument>
+            </call>
+        </service>
     </services>
 </container>

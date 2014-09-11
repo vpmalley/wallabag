@@ -12,7 +12,10 @@ use JMS\Serializer\Annotation\Groups;
 /**
  * Entry
  *
- * @MongoDB\Document(repositoryClass="Wallabag\Bundle\CoreBundle\Repository\EntryRepository")
+ * @MongoDB\Document(repositoryClass="Wallabag\Bundle\CoreBundle\Repository\EntryRepository",
+ *      indexes={
+ *          @MongoDB\Index(keys={"user" = "asc", "url" = "asc"}, options={"unique"="true"})
+ *      })
  */
 class Entry
 {
@@ -66,7 +69,7 @@ class Entry
     private $createdAt;
 
     /**
-     * @var Tag[]
+     * @var ArrayCollection
      * @MongoDB\EmbedMany(targetDocument="Wallabag\Bundle\CoreBundle\Document\Tag")
      * @Expose
      * @Groups({"entries"})
@@ -77,19 +80,19 @@ class Entry
      * @var boolean
      * @MongoDB\Boolean
      */
-    private $archived;
+    private $archived = false;
 
     /**
      * @var boolean
      * @MongoDB\Boolean
      */
-    private $deleted;
+    private $deleted = false;
 
     /**
      * @var boolean
      * @MongoDB\Boolean
      */
-    private $starred;
+    private $starred = false;
 
     public function __construct()
     {
@@ -214,6 +217,10 @@ class Entry
     public function removeTag(\Wallabag\Bundle\CoreBundle\Document\Tag $tag)
     {
         $this->tags->removeElement($tag);
+    }
+
+    public function flushTags() {
+        $this->tags->clear();
     }
 
     /**
