@@ -60,6 +60,17 @@ doctrine:
         auto_generate_proxy_classes: "%kernel.debug%"
         auto_mapping: true
 
+# app/config/config.yml
+doctrine_mongodb:
+    connections:
+        default:
+            server: mongodb://localhost:27017
+            options: {}
+    default_database: wallabag
+    document_managers:
+        default:
+            auto_mapping: true
+
 # Swiftmailer Configuration
 swiftmailer:
     transport: "%mailer_transport%"
@@ -68,8 +79,28 @@ swiftmailer:
     password:  "%mailer_password%"
     spool:     { type: memory }
 
+fos_rest:
+    body_converter:
+        enabled: false
+    view:
+        view_response_listener: true
+    format_listener:
+            rules:
+                # setting fallback_format to json means that instead of considering the next rule in case of a priority mismatch, json will be used
+                - { path: '^/api', priorities: ['json'], fallback_format: json, prefer_extension: false }
+
+
 # FOS User Configuration
 fos_user:
-    db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
+    db_driver: mongodb # other valid values are 'mongodb', 'couchdb' and 'propel'
     firewall_name: main
-    user_class: Wallabag\CoreBundle\Entity\User
+    user_class: Wallabag\CoreBundle\Document\User
+
+jms_di_extra:
+    locations:
+        all_bundles: false
+        bundles: [WallabagCoreBundle]
+        directories: ["%kernel.root_dir%/../src"]
+
+sensio_framework_extra:
+    view:    { annotations: false }

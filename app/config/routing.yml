@@ -11,7 +11,7 @@ wallabag_cli:
 wallabag_api:
     resource: "@WallabagApiBundle/Controller/"
     type:     annotation
-    prefix:   /
+    prefix:   /api
 
 wallabag_core:
     resource: "@WallabagCoreBundle/Controller/"
