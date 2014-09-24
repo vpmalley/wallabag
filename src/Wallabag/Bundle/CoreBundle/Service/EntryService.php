@@ -123,19 +123,17 @@ class EntryService {
     /**
      * Change updatable fields of an entry an persists it
      *
-     * @param Entry $entry the entry
+     * @param Entry $entry
      * @param string[] $tags the new tags
      * @param boolean $archived the new archived status
      * @param boolean $starred the new starred status
      * @param boolean $deleted the new deleted status
      */
     public function updateEntry(Entry $entry, $tags, $archived, $starred, $deleted) {
-        $managed = $this->dm->merge($entry);
-
         if(is_array($tags)) {
-            $managed->flushTags();
+            $entry->flushTags();
             foreach ($tags as $tag) {
-                $managed->addTag(new Tag($tag));
+                $entry->addTag(new Tag($tag));
             }
         }
         if($archived != null) {
@@ -150,4 +148,13 @@ class EntryService {
 
         $this->dm->flush();
     }
-} 
+
+    /**
+     * Delete an entry
+     * @param  Entry  $entry
+     */
+    public function deleteEntry(Entry $entry) {
+        $entry->setDeleted(true);
+        $this->dm->flush();
+    }
+}

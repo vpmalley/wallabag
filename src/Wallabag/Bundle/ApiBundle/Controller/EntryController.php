@@ -1,9 +1,8 @@
 <?php
 
-
 namespace Wallabag\Bundle\ApiBundle\Controller;
 
-
+use FOS\RestBundle\Controller\Annotations\Delete;
 use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\Patch;
 use FOS\RestBundle\Controller\Annotations\View;
@@ -13,6 +12,7 @@ use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Wallabag\Bundle\CoreBundle\Document\Entry;
 use Wallabag\Bundle\CoreBundle\Document\User;
 use Wallabag\Bundle\CoreBundle\Service\EntryService;
@@ -53,6 +53,7 @@ class EntryController {
     public function getAction(User $user, Entry $entry) {
         $this->logger->info("User {username} wants to show entry {url}",
             array("username" => $user->getUsername(), "url" => $entry->getUrl()));
+
         return $entry;
     }
 
@@ -70,10 +71,12 @@ class EntryController {
      * )
      */
     public function patchAction(User $user, Entry $entry, Request $request) {
-        $request->request->get("tags", array());
-        $request->request->get("archived");
-        $request->request->get("deleted");
-        $request->request->get("starred");
+        $tags     = $request->request->get("tags", array());
+        $archived = $request->request->get("archived");
+        $deleted  = $request->request->get("deleted");
+        $starred  = $request->request->get("starred");
+
+        $this->entryService->updateEntry($entry, $tags, $archived, $starred, $deleted);
 
         $view = \FOS\RestBundle\View\View::create();
         $view->setStatusCode(Response::HTTP_NO_CONTENT);
@@ -81,6 +84,29 @@ class EntryController {
                     "user" => $user->getUsername(),
                     "entry" => $entry->getId()
                 )));
+
         return $view;
     }
-} 
+
+    /**
+     * @Delete("/u/{user}/entry/{entry}")
+     * @ParamConverter("user", options={"mapping": {"user": "username"}})
+     * @ParamConverter("entry", options={"id"="entry"})
+     * @View(statusCode=200)
+     * @ApiDoc(
+     *      requirements={
+     *          {"name"="user", "dataType"="string", "requirement"="\w+", "description"="The username"}
+     *      }
+     * )
+     */
+    public function deleteAction(User $user, Entry $entry)
+    {
+        if ($entry->getDeleted()) {
+            throw new NotFoundHttpException();
+        }
+
+        $this->entryService->deleteEntry($entry);
+
+        return $entry;
+    }
+}

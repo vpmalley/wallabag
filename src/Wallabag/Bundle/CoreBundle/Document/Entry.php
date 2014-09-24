@@ -79,18 +79,24 @@ class Entry
     /**
      * @var boolean
      * @MongoDB\Boolean
+     * @Expose
+     * @Groups({"entries"})
      */
     private $archived = false;
 
     /**
      * @var boolean
      * @MongoDB\Boolean
+     * @Expose
+     * @Groups({"entries"})
      */
     private $deleted = false;
 
     /**
      * @var boolean
      * @MongoDB\Boolean
+     * @Expose
+     * @Groups({"entries"})
      */
     private $starred = false;
 
