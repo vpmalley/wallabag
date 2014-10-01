@@ -5,7 +5,7 @@
 {% block title %}{{ entry.title|raw }} ({{ entry.url | e | getDomain }}){% endblock %}
 {% block content %}
 				{% include '_highlight.twig' %}
-        <div id="article_toolbar">
+        <div id="article_toolbar" {% if constant('TOOLBAR_FIXED') == 1 %}style="position:fixed;" {% endif %}>
             <ul class="links">
                 <li class="topPosF"><a href="#top" title="{% trans "Back to top" %}" class="tool top icon icon-arrow-up-thick"><span>{% trans "Back to top" %}</span></a></li>
                 <li><a href="{{ entry.url|e }}" target="_blank" title="{% trans "original" %} : {{ entry.title|e }}" class="tool link icon icon-link"><span>{{ entry.url | e | getDomain }}</span></a></li>
