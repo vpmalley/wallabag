@@ -329,7 +329,7 @@ final class Tools
             $_GET = $_REQUEST = array(
                 "url" => $url->getUrl(),
                 "max" => 5,
-                "links" => "preserve",
+                "links" => (CONVERT_LINKS_FOOTNOTES ? 'footnotes':'preserve'),
                 "exc" => "",
                 "format" => "json",
                 "submit" => "Create Feed"
