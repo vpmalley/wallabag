@@ -49,6 +49,8 @@
 @define ('FLATTRED', '2');
 // display or not print link in article view
 @define ('SHOW_PRINTLINK', '1');
+// fix the toolbar position
+@define ('TOOLBAR_FIXED');
 // display or not percent of read in article view. Affects only default theme.
 @define ('SHOW_READPERCENT', '1');
 @define ('ABS_PATH', 'assets/');
