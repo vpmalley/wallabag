@@ -2,11 +2,45 @@ security:
     providers:
         in_memory:
             memory: ~
+        fos_userbundle:
+            id: fos_user.user_manager
 
     firewalls:
+        oauth_token:
+            pattern:    ^/oauth/v2/token
+            security:   false
+
+        oauth_authorize:
+            pattern:    ^/oauth/v2/auth
+            form_login:
+                provider: fos_userbundle
+                check_path: /oauth/v2/auth_login_check
+                login_path: /oauth/v2/auth_login
+            anonymous: true
+
+        api:
+            pattern:    ^/api
+            fos_oauth:  true
+            stateless:  true
+            anonymous:  false
+
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
         default:
             anonymous: ~
+        secured_area:
+            anonymous: ~
+            oauth:
+                resource_owners:
+                    my_github:          "/login/check-github"
+                login_path:        /login
+                use_forward:       false
+                failure_path:      /login
+
+                oauth_user_provider:
+                    service: hwi_oauth.user.provider.fosub_bridge
+
+    access_control:
+        - { path: ^/api, roles: [ IS_AUTHENTICATED_FULLY ] }

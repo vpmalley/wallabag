@@ -32,6 +32,8 @@ class AppKernel extends Kernel
             new Wallabag\Bundle\ApiBundle\WallabagApiBundle(),
             new Wallabag\Bundle\CliBundle\WallabagCliBundle(),
             new Wallabag\Bundle\FullTextRssBundle\WallabagFullTextRssBundle(),
+            new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
+            new FOS\OAuthServerBundle\FOSOAuthServerBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
