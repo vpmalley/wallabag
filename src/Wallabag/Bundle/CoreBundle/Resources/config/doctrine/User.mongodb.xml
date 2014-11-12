@@ -3,7 +3,7 @@
       xsi:schemaLocation="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping
                     http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping.xsd">
 
-    <document name="Wallabag\Bundle\CoreBundle\Document\Client" db="wallabag" collection="oauthClient" customId="true">
+    <document name="Wallabag\Bundle\CoreBundle\Document\User" db="wallabag" collection="oauthClient" customId="true">
         <field fieldName="id" id="true" strategy="AUTO" />
     </document>
 

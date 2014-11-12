@@ -4,7 +4,7 @@ imports:
 
 framework:
     #esi:             ~
-    #translator:      { fallback: "%locale%" }
+    translator:      { fallback: "%locale%" }
     secret:          "%secret%"
     router:
         resource: "%kernel.root_dir%/config/routing.yml"
@@ -126,9 +126,9 @@ hwi_oauth:
 
 fos_oauth_server:
     db_driver: mongodb
-    client_class:        Wallabag\Bundle\ApiBundle\Document\Client
-    access_token_class:  Wallabag\Bundle\ApiBundle\Document\AccessToken
-    refresh_token_class: Wallabag\Bundle\ApiBundle\Document\RefreshToken
-    auth_code_class:     Wallabag\Bundle\ApiBundle\Document\AuthCode
+    client_class:        Wallabag\Bundle\CoreBundle\Document\Client
+    access_token_class:  Wallabag\Bundle\CoreBundle\Document\AccessToken
+    refresh_token_class: Wallabag\Bundle\CoreBundle\Document\RefreshToken
+    auth_code_class:     Wallabag\Bundle\CoreBundle\Document\AuthCode
     service:
         user_provider: fos_user.user_manager

@@ -3,9 +3,9 @@
       xsi:schemaLocation="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping
                     http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping.xsd">
 
-    <document name="Wallabag\ApiBundle\Document\AccessToken" db="wallabag" collection="oauthAccessToken" customId="true">
+    <document name="Wallabag\Bundle\CoreBundle\Document\AccessToken" db="wallabag" collection="oauthAccessToken" customId="true">
         <field fieldName="id" id="true" strategy="AUTO" />
-        <reference-one target-document="Wallabag\ApiBundle\Document\Client" field="client" />
+        <reference-one target-document="Wallabag\Bundle\CoreBundle\Document\Client" field="client" />
     </document>
 
 </doctrine-mongo-mapping>
